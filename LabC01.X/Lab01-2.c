@@ -1,5 +1,5 @@
 /* 
- * File:   Lab01.c
+ * File:   Lab01-2.c
  * Author: Kevin Alarcón
  *
  * Fecha de creación: 26 de marzo de 2023, 05:12 PM
@@ -40,11 +40,9 @@ void __interrupt() isr(void) {
     if (PIR1bits.ADIF) { // si se activa la bandera de interrupcion del ADC
         if (ADCON0bits.CHS == 0b0000){ // si está en ADC AN0
             PORTB = ADRESH; // asignar el PORTB como el potenciometro de PORTA0
-            ADCON0bits.CHS = 0b0100; // cambiar a ADC AN5
         }
         else if (ADCON0bits.CHS == 0b0100){ // si está en ADC AN5
             PORTC = ADRESH; // asignar el PORTC como el potenciometro de PORTA5
-            ADCON0bits.CHS = 0b0000; // cambiar a ADC AN0
         }
         PIR1bits.ADIF = 0; // limpiar la bandera de la interrupcion
     }
@@ -56,8 +54,17 @@ void main(void) {
     setup ();
     //setupADC ();
     while(1){
-        __delay_ms(10);
+        
         if (ADCON0bits.GO == 0) { // si la lectura del ADC se desactiva
+            if(ADCON0bits.CHS == 0b0000)
+            {
+                ADCON0bits.CHS = 0b0100; // cambiar a ADC AN5
+            }
+            else if(ADCON0bits.CHS == 0b0100)
+            {
+                ADCON0bits.CHS = 0b0000; // cambiar a ADC AN0
+            }
+            __delay_us(50);
             ADCON0bits.GO = 1;
         }
     }
@@ -112,7 +119,8 @@ void setup(void){
     ADCON1bits.VCFG1 = 0; //Voltaje referenciado de 5V
     ADCON0bits.ADCS = 0b10; // Fosc/32
      
-    ADCON1bits.ADFM = 0; //Justificado a la derecha
+    ADCON1bits.ADFM = 0; //Justificado a la izquierda
     ADCON0bits.ADON = 1;//Encendemos el módulo del ADC
     __delay_ms(1); 
+    return;
 }

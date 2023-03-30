@@ -1,8 +1,8 @@
 /* 
- * File:   newmain.c
+ * File:   PreLab01.c
  * Author: Kevin Alarcón
  *
- * Created on 23 de marzo de 2023, 04:57 PM
+ * Fecha de creación: 23 de marzo de 2023, 04:57 PM
  */
 
 // CONFIG1
